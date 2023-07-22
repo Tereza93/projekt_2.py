@@ -1,0 +1,65 @@
+"""
+projekt_2.py: druhý projekt do Engeto Online Python Akademie
+author: Tereza Smrkovská
+email: tereza.smrcek@seznam.cz
+discord: tereza.smrkovska
+"""
+
+import random
+import time
+
+def generate_secret_number():
+    digits = list(range(1, 10))
+    secret_number = [random.choice(digits)]
+    digits.remove(secret_number[0])
+    
+    while len(secret_number) < 4:
+        digit = random.choice(digits)
+        secret_number.append(digit)
+        digits.remove(digit)
+    
+    return secret_number
+
+def is_valid_guess(guess):
+    if not guess.isdigit() or len(guess) != 4 or guess[0] == '0' or len(set(guess)) < 4:
+        return False
+    return True
+
+def evaluate_guess(secret_number, guess):
+    bulls = cows = 0
+    for i in range(4):
+        if guess[i] == str(secret_number[i]):
+            bulls += 1
+        elif guess[i] in str(secret_number):
+            cows += 1
+    return bulls, cows
+
+def play_bulls_and_cows():
+    print("Hi there!")
+    print("-----------------------------------------------")
+    print("I've generated a random 4 digit number for you.")
+    print("Let's play a bulls and cows game.")
+    print("-----------------------------------------------")
+
+    secret_number = generate_secret_number()
+    guesses = 0
+
+    while True:
+        guess = input("Enter a number: ")
+        if not is_valid_guess(guess):
+            print("Invalid input! Please enter a valid 4-digit number with unique digits.")
+            continue
+
+        guesses += 1
+        bulls, cows = evaluate_guess(secret_number, guess)
+
+        if bulls == 4:
+            print(f"Correct, you've guessed the right number in {guesses} guesses!")
+            break
+        else:
+            bulls_str = "bull" if bulls == 1 else "bulls"
+            cows_str = "cow" if cows == 1 else "cows"
+            print(f"{bulls} {bulls_str}, {cows} {cows_str}")
+
+if __name__ == "__main__":
+    play_bulls_and_cows()
